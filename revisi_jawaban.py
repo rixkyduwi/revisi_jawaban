@@ -29,18 +29,24 @@ def login_user():
   # request sesuai spec sbg data body bukan parameter lihat contoh book_ws.db
     username= request.form['username']
     password= request.form['password']
+    S=10
     user=login.query.filter_by(username=username).first()
   # pada def create line 50 dan parsingnya line 51
   # cari kedalam db user username dan passwordusername=login.query.filter_by(username=username).first()
     if not user or not check_password_hash(user.password, password):
         
   # jika ketemu maka update kolom token ybs dengen random string
-        access_token = random.choice(string.ascii_lowercase)
+  
+        access_token = ''.join(random.choices(string.ascii_uppercase + string.digits, k = S))
         user.token= access_token
         db.session.commit()
   # response kan sbb
   # body {"token": "randomsetringnyaaahh"}, http code: 200
-    return username.token
+    return jsonify({
+        "msg": "Succes Signin",
+        "status": 200,
+        "data": access_token,
+    })
 
 @auth.verify_token
 def verify_token(token):
