@@ -24,13 +24,15 @@ class login(db.Model):
 # rizky dwi saputra (6A) 
 # moh saefudin fikri (6B) 
 
-@app.route("/api/v1/login/<username>,<password>", methods=["POST"])
-def login_user(username,password):
+@app.route("/api/v1/login", methods=["POST"])
+def login_user():
   # request sesuai spec sbg data body bukan parameter lihat contoh book_ws.db
+    username= request.form['username']
+    password= request.form['password']
     user=login.query.filter_by(username=username).first()
   # pada def create line 50 dan parsingnya line 51
   # cari kedalam db user username dan passwordusername=login.query.filter_by(username=username).first()
-    if not user or not check_password_hash(username.password, password):
+    if not user or not check_password_hash(user.password, password):
         
   # jika ketemu maka update kolom token ybs dengen random string
         access_token = random.choice(string.ascii_lowercase)
