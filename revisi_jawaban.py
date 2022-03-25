@@ -15,7 +15,7 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = database_file
 db = SQLAlchemy(app)
 auth = HTTPTokenAuth(scheme='Bearer')
-class User(db.Model):
+class login(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False, primary_key=True)
     password = db.Column(db.String(80), unique=False, nullable=False, primary_key=False)
     keterangan = db.Column(db.String(100))
@@ -24,12 +24,10 @@ class User(db.Model):
 # rizky dwi saputra (6A) 
 # moh saefudin fikri (6B) 
 
-@app.route("/api/v1/login", methods=["POST"])
-def login():
+@app.route("/api/v1/login/<username>,<password>", methods=["POST"])
+def login_user(username,password):
   # request sesuai spec sbg data body bukan parameter lihat contoh book_ws.db
-    username= request.form['username']
-    password= request.form['password']
-    user=User.query.filter_by(username=username).first()
+    user=login.query.filter_by(username=username).first()
   # pada def create line 50 dan parsingnya line 51
   # cari kedalam db user username dan passwordusername=login.query.filter_by(username=username).first()
     if not user or not check_password_hash(username.password, password):
@@ -44,7 +42,7 @@ def login():
 
 @auth.verify_token
 def verify_token(token):
-    user=User.query.filter_by(token=token).first() 
+    user=login.query.filter_by(token=token).first() 
     return user.keterangan 
 
 @app.route('/api/v2/users/info')
