@@ -4,7 +4,7 @@ from flask_httpauth import HTTPTokenAuth
 import random
 import string
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import check_password_hash
 project_dir = os.path.dirname(os.path.abspath(__file__))
 database_file = "sqlite:///{}".format(os.path.join(project_dir, "login.db"))
 app = Flask(__name__)
@@ -23,7 +23,7 @@ class login(db.Model):
 def login_user():
     username= request.form['username']
     password= request.form['password']
-    S=10
+    S=100
     user=login.query.filter_by(username=username).first()
     if not user or not check_password_hash(user.password, password):
         access_token = ''.join(random.choices(string.ascii_uppercase + string.digits, k = S))
