@@ -30,7 +30,7 @@ def login_user():
         user.token= access_token
         db.session.commit()
     return jsonify({
-        "msg": "Succes Signin",
+        "msg": "Success Signin",
         "status": 200,
         "token": access_token,
     })
@@ -41,6 +41,10 @@ def verify_token(token):
 @app.route('/api/v2/users/info')
 @auth.login_required
 def index():
-    return "Hello, {}!".format(auth.current_user())
+    return jsonify({
+        "msg": "welcome",
+        "status": 200,
+        "username": auth.current_user(),
+    })
 if __name__ == '__main__':
     app.run(debug = True, port=4000)
